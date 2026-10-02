@@ -2,23 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>FlipVid — Flip. Rotate. Done.</title>
 
-    <meta name="description" content="Flip and rotate videos online for free with FlipVid. Simple browser-based video orientation tool.">
+    <meta
+        name="description"
+        content="Flip and rotate videos online for free with FlipVid. Simple browser-based video orientation tool."
+    >
 
-    <link rel="icon" href="assets/FlipVid.ico" type="image/x-icon">
-
-    <!-- FFmpeg -->
-    <script src="ffmpeg/ffmpeg.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="assets/FlipVid.ico"
+    >
 
     <style>
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         html {
@@ -26,10 +31,18 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
             background: #111827;
             color: #f9fafb;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         a {
@@ -37,8 +50,9 @@
             text-decoration: none;
         }
 
-        button {
-            font-family: inherit;
+        button,
+        input {
+            font: inherit;
         }
 
         /* =========================
@@ -46,44 +60,60 @@
         ========================= */
 
         .navbar {
-            width: 100%;
-            background: rgba(17, 24, 39, 0.95);
-            border-bottom: 1px solid #1f2937;
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+
+            background: rgba(17, 24, 39, 0.94);
+            backdrop-filter: blur(12px);
+
+            border-bottom: 1px solid #374151;
         }
 
         .nav-container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 16px 20px;
+
+            min-height: 70px;
+
+            padding: 0 24px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
+            gap: 20px;
         }
 
         .nav-logo {
-            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 19px;
             font-weight: 800;
-            color: #ffffff;
+
+            white-space: nowrap;
         }
 
-        .nav-logo span {
-            color: #3b82f6;
+        .nav-logo img {
+            width: 32px;
+            height: 32px;
+
+            object-fit: contain;
         }
 
         .nav-links {
             display: flex;
-            gap: 24px;
             align-items: center;
+            gap: 26px;
+
+            font-size: 14px;
+            color: #d1d5db;
         }
 
         .nav-links a {
-            color: #d1d5db;
-            font-size: 14px;
-            transition: 0.2s;
+            transition: color 0.2s ease;
         }
 
         .nav-links a:hover {
@@ -95,373 +125,466 @@
         ========================= */
 
         .hero {
-            min-height: 650px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .hero-content {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+
+            padding: 90px 24px 70px;
+
+            text-align: center;
         }
 
-        .hero-logo-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 25px;
-        }
+        .hero-icon {
+            width: 76px;
+            height: 76px;
 
-        .hero-logo {
-            width: 130px;
-            height: 130px;
             object-fit: contain;
-            display: block;
+
+            margin-bottom: 20px;
+
+            filter: drop-shadow(
+                0 8px 20px rgba(59, 130, 246, 0.16)
+            );
         }
 
         .hero-badge {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.12);
-            border: 1px solid rgba(59, 130, 246, 0.35);
-            color: #60a5fa;
-            padding: 7px 14px;
+            display: inline-flex;
+            align-items: center;
+
+            padding: 6px 12px;
+
+            margin-bottom: 18px;
+
             border-radius: 999px;
+
+            background: rgba(59, 130, 246, 0.10);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+
+            color: #93c5fd;
+
             font-size: 13px;
-            margin-bottom: 22px;
+            font-weight: 700;
         }
 
         .hero h1 {
-            font-size: clamp(48px, 8vw, 82px);
-            line-height: 1.05;
-            margin-bottom: 24px;
-            font-weight: 800;
-            letter-spacing: -3px;
-        }
+            margin: 0;
 
-        .hero h1 span {
-            color: #3b82f6;
+            font-size: clamp(42px, 7vw, 72px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+
+            font-weight: 850;
         }
 
         .hero p {
-            max-width: 680px;
-            margin: 0 auto 32px;
+            max-width: 650px;
+            margin: 22px auto 0;
+
             color: #9ca3af;
-            font-size: 18px;
+
+            font-size: 17px;
+            line-height: 1.7;
         }
 
         .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 14px;
             flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 30px;
         }
 
-        .btn {
-            border: none;
-            border-radius: 10px;
-            padding: 14px 24px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
+        .hero-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+
+            min-height: 46px;
+
+            padding: 12px 20px;
+
+            border-radius: 9px;
+
+            font-weight: 700;
+            font-size: 14px;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
         }
 
-        .btn-primary {
+        .hero-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .hero-btn-primary {
             background: #3b82f6;
             color: white;
         }
 
-        .btn-primary:hover {
+        .hero-btn-primary:hover {
             background: #2563eb;
-            transform: translateY(-1px);
         }
 
-        .btn-secondary {
+        .hero-btn-secondary {
             background: #1f2937;
-            color: white;
             border: 1px solid #374151;
+            color: #f9fafb;
         }
 
-        .btn-secondary:hover {
+        .hero-btn-secondary:hover {
             background: #374151;
         }
 
         .trust-line {
-            margin-top: 25px;
-            font-size: 13px;
+            margin-top: 18px;
+
             color: #6b7280;
+
+            font-size: 12px;
         }
 
         /* =========================
-           GENERAL SECTIONS
+           SECTIONS
         ========================= */
 
-        section {
-            width: 100%;
-        }
-
-        .section-container {
+        .section {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 80px 20px;
+
+            padding: 70px 24px;
         }
 
         .section-heading {
             text-align: center;
-            margin-bottom: 45px;
+
+            margin-bottom: 32px;
         }
 
         .section-heading h2 {
-            font-size: 36px;
-            margin-bottom: 12px;
+            margin: 0;
+
+            font-size: 32px;
+            line-height: 1.2;
         }
 
         .section-heading p {
+            max-width: 620px;
+
+            margin: 12px auto 0;
+
             color: #9ca3af;
-            max-width: 650px;
-            margin: 0 auto;
+
+            font-size: 15px;
         }
 
         /* =========================
-           ONLINE TOOL
+           TOOL AREA
         ========================= */
 
         .tool-section {
             background: #0f172a;
+
+            border-top: 1px solid rgba(55, 65, 81, 0.45);
+            border-bottom: 1px solid rgba(55, 65, 81, 0.45);
         }
 
         .tool-card {
-            max-width: 850px;
+            max-width: 820px;
             margin: 0 auto;
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 18px;
+
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+            background: #1f2937;
+
+            border: 1px solid #374151;
+            border-radius: 16px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.18);
         }
 
-        .file-area {
-            border: 2px dashed #4b5563;
-            border-radius: 14px;
-            padding: 45px 20px;
+        .tool-title {
+            margin: 0 0 6px;
+
+            font-size: 22px;
+            font-weight: 800;
+
             text-align: center;
-            transition: 0.2s;
         }
 
-        .file-area:hover {
-            border-color: #3b82f6;
-        }
+        .tool-subtitle {
+            margin: 0 0 24px;
 
-        .file-area h3 {
-            font-size: 21px;
-            margin-bottom: 8px;
-        }
+            text-align: center;
 
-        .file-area p {
             color: #9ca3af;
+
             font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .file-name {
-            margin-top: 15px;
-            color: #60a5fa;
-            font-size: 28px;
-            font-weight: 600;
-            word-break: break-word;
         }
 
         /* =========================
-           POLISHED VIDEO PREVIEW
+           FILE PICKER
+        ========================= */
+
+        .file-picker {
+            position: relative;
+
+            display: block;
+
+            border: 2px dashed #4b5563;
+            border-radius: 12px;
+
+            padding: 34px 20px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .file-picker:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.04);
+        }
+
+        .file-picker input {
+            position: absolute;
+
+            width: 1px;
+            height: 1px;
+
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .file-picker-icon {
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+        .file-picker-title {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .file-picker-text {
+            margin-top: 4px;
+
+            color: #9ca3af;
+
+            font-size: 12px;
+        }
+
+        .selected-file {
+            display: none;
+
+            margin-top: 14px;
+            padding: 12px 14px;
+
+            background: #111827;
+
+            border: 1px solid #374151;
+            border-radius: 9px;
+
+            color: #d1d5db;
+
+            text-align: center;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            word-break: break-word;
+        }
+
+        .selected-file.show {
+            display: block;
+        }
+
+        /* =========================
+           VIDEO PREVIEW
         ========================= */
 
         .video-preview {
             display: none;
+
             width: 100%;
             max-width: 760px;
+
             margin: 30px auto 0;
+
             padding: 20px;
+
             background: #111827;
+
             border: 1px solid #374151;
             border-radius: 16px;
+
             box-shadow:
                 0 12px 35px rgba(0, 0, 0, 0.28),
                 0 0 0 1px rgba(59, 130, 246, 0.04);
+
             position: relative;
             overflow: hidden;
-        }
-
-        .video-preview::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #3b82f6;
         }
 
         .video-preview.show {
             display: block;
         }
 
-        .preview-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 14px;
-        }
+        .preview-label {
+            margin-bottom: 12px;
 
-        .preview-title {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            color: #f9fafb;
-            font-size: 15px;
+            color: #9ca3af;
+
+            font-size: 12px;
             font-weight: 700;
-        }
 
-        .preview-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            background: rgba(59, 130, 246, 0.14);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #60a5fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-        }
-
-        .preview-status {
-            color: #6b7280;
-            font-size: 11px;
-            white-space: nowrap;
-        }
-
-        .preview-video-container {
-            background: #000000;
-            border: 1px solid #374151;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
         }
 
         .preview-video-container video {
             display: block;
+
             width: 100%;
+
             max-height: 440px;
             min-height: 220px;
+
             background: #000000;
+
             object-fit: contain;
         }
 
-        .preview-note {
-            margin-top: 11px;
-            color: #6b7280;
-            font-size: 12px;
-            text-align: center;
-        }
+        /* =========================
+           ACTIONS
+        ========================= */
 
-        .preview-note span {
-            color: #9ca3af;
-        }
+        .actions {
+            display: none;
 
-        .controls {
-            margin-top: 28px;
-        }
+            margin-top: 22px;
 
-        .control-title {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #d1d5db;
-        }
-
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
         }
 
+        .actions.show {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         .action-btn {
+            min-height: 48px;
+
+            padding: 12px 14px;
+
             background: #111827;
+
             border: 1px solid #374151;
-            color: #d1d5db;
             border-radius: 9px;
-            padding: 12px 8px;
+
+            color: #d1d5db;
+
             cursor: pointer;
-            font-size: 13px;
-            transition: 0.2s;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
         }
 
         .action-btn:hover {
-            border-color: #3b82f6;
-            color: white;
+            background: #374151;
+            border-color: #4b5563;
+
+            transform: translateY(-1px);
         }
 
         .action-btn.active {
-            background: #3b82f6;
+            background: rgba(59, 130, 246, 0.12);
+
             border-color: #3b82f6;
-            color: white;
+
+            color: #93c5fd;
         }
 
-        .action-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .process-area {
-            margin-top: 25px;
-            text-align: center;
-        }
+        /* =========================
+           PROCESS BUTTON
+        ========================= */
 
         .process-btn {
+            display: none;
+
             width: 100%;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 15px;
+
+            margin-top: 18px;
+
+            min-height: 52px;
+
+            padding: 14px 20px;
+
+            border: 0;
             border-radius: 10px;
-            font-weight: 700;
-            font-size: 15px;
+
+            background: #3b82f6;
+
+            color: white;
+
             cursor: pointer;
-            transition: 0.2s;
+
+            font-size: 15px;
+            font-weight: 800;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .process-btn.show {
+            display: block;
         }
 
         .process-btn:hover {
             background: #2563eb;
+
+            transform: translateY(-1px);
         }
 
         .process-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.65;
+
             cursor: not-allowed;
+
+            transform: none;
         }
 
         /* =========================
-           PROCESSING STATUS
+           PROGRESS
         ========================= */
 
         .progress-panel {
             display: none;
+
             margin-top: 22px;
+
             padding: 20px;
+
             background: #111827;
+
             border-radius: 12px;
+
             border: 1px solid #374151;
+
             text-align: left;
         }
 
@@ -472,54 +595,77 @@
         .progress-header {
             display: flex;
             align-items: center;
+
             gap: 12px;
+
             margin-bottom: 14px;
         }
 
         .progress-spinner {
             width: 22px;
             height: 22px;
+
             border: 3px solid #374151;
             border-top-color: #3b82f6;
+
             border-radius: 50%;
-            animation: flipvid-spin 0.8s linear infinite;
+
+            animation:
+                flipvid-spin 0.8s linear infinite;
+
             flex-shrink: 0;
         }
 
         .progress-spinner.complete {
             border: 0;
+
             background: #10b981;
+
             position: relative;
+
             animation: none;
         }
 
         .progress-spinner.complete::after {
             content: "✓";
+
             position: absolute;
+
             inset: 0;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             color: white;
+
             font-size: 13px;
             font-weight: 800;
         }
 
         .progress-spinner.error {
             border: 0;
+
             background: #ef4444;
+
             position: relative;
+
             animation: none;
         }
 
         .progress-spinner.error::after {
             content: "!";
+
             position: absolute;
+
             inset: 0;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             color: white;
+
             font-size: 13px;
             font-weight: 800;
         }
@@ -530,36 +676,42 @@
             }
         }
 
-        .progress-info {
-            min-width: 0;
-        }
-
         .progress-title {
             font-size: 15px;
             font-weight: 700;
+
             color: #f9fafb;
+
             line-height: 1.3;
         }
 
         .progress-text {
             font-size: 13px;
+
             color: #9ca3af;
+
             margin-top: 2px;
         }
 
         .progress-bar {
             width: 100%;
             height: 8px;
+
             background: #374151;
+
             border-radius: 999px;
+
             overflow: hidden;
         }
 
         .progress-fill {
             width: 0%;
             height: 100%;
+
             background: #3b82f6;
-            transition: width 0.3s ease;
+
+            transition:
+                width 0.3s ease;
         }
 
         .progress-fill.complete {
@@ -567,115 +719,27 @@
         }
 
         /* =========================
-           POLISHED DOWNLOAD / RESULT
+           ERROR
         ========================= */
-
-        .download-area {
-            display: none;
-            margin-top: 22px;
-            padding: 24px;
-            background: #111827;
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            border-radius: 14px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .download-area::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #10b981;
-        }
-
-        .download-area.show {
-            display: block;
-            animation: result-fade-in 0.3s ease;
-        }
-
-        @keyframes result-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .download-success-icon {
-            width: 46px;
-            height: 46px;
-            margin: 0 auto 12px;
-            border-radius: 50%;
-            background: rgba(16, 185, 129, 0.14);
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            color: #34d399;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .download-title {
-            color: #f9fafb;
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-
-        .download-message {
-            color: #9ca3af;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .download-filename {
-            color: #6b7280;
-            font-size: 12px;
-            word-break: break-word;
-            margin-bottom: 18px;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #10b981;
-            color: white;
-            padding: 13px 24px;
-            border-radius: 9px;
-            font-weight: 700;
-            transition: 0.2s;
-        }
-
-        .download-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
-        }
-
-        .download-btn-icon {
-            font-size: 15px;
-            line-height: 1;
-        }
 
         .error-message {
             display: none;
+
             margin-top: 18px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.35);
+
+            padding: 12px 14px;
+
+            border-radius: 9px;
+
+            background: rgba(239, 68, 68, 0.08);
+
+            border: 1px solid rgba(239, 68, 68, 0.25);
+
             color: #fca5a5;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
+
+            font-size: 13px;
+
+            text-align: center;
         }
 
         .error-message.show {
@@ -683,205 +747,388 @@
         }
 
         /* =========================
-           AD PLACEHOLDER
+           DOWNLOAD RESULT
         ========================= */
 
-        .ad-section {
-            width: 100%;
-            max-width: 1100px;
-            margin: 20px auto 40px;
-            padding: 0 20px;
+        .download-area {
+            display: none;
+
+            margin-top: 22px;
+
+            padding: 24px;
+
+            background: #111827;
+
+            border: 1px solid rgba(16, 185, 129, 0.35);
+
+            border-radius: 14px;
+
+            text-align: center;
+
+            position: relative;
+
+            overflow: hidden;
         }
 
-        .ad-placeholder {
-            width: 100%;
-            min-height: 120px;
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 14px;
+        .download-area::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 3px;
+
+            background: #10b981;
+        }
+
+        .download-area.show {
+            display: block;
+
+            animation:
+                result-fade-in 0.3s ease;
+        }
+
+        @keyframes result-fade-in {
+            from {
+                opacity: 0;
+
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform: translateY(0);
+            }
+        }
+
+        .download-success-icon {
+            width: 46px;
+            height: 46px;
+
+            margin: 0 auto 12px;
+
+            border-radius: 50%;
+
+            background: rgba(16, 185, 129, 0.14);
+
+            border: 1px solid rgba(16, 185, 129, 0.35);
+
+            color: #34d399;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .download-title {
+            color: #f9fafb;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            margin-bottom: 4px;
+        }
+
+        .download-message {
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .download-filename {
             color: #6b7280;
+
+            font-size: 12px;
+
+            word-break: break-word;
+
+            margin-bottom: 18px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            background: #10b981;
+
+            color: white;
+
+            padding: 13px 24px;
+
+            border-radius: 9px;
+
+            font-weight: 700;
+
+            transition:
+                0.2s;
+        }
+
+        .download-btn:hover {
+            background: #059669;
+
+            transform: translateY(-1px);
+        }
+
+        .download-btn-icon {
+            font-size: 15px;
+
+            line-height: 1;
+        }
+
+        /* =========================
+           AD PLACEHOLDER
+        ========================= */
+
+        .ad-placeholder {
+            max-width: 820px;
+
+            min-height: 90px;
+
+            margin: 30px auto 0;
+
+            border: 1px dashed #374151;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #4b5563;
+
             font-size: 11px;
-            letter-spacing: 2px;
         }
 
         /* =========================
            FEATURES
         ========================= */
 
-        .features-section {
-            background: #111827;
-        }
-
-        .feature-grid {
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
         }
 
         .feature-card {
+            padding: 24px;
+
             background: #1f2937;
+
             border: 1px solid #374151;
-            border-radius: 14px;
-            padding: 28px;
+
+            border-radius: 12px;
         }
 
         .feature-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: rgba(59, 130, 246, 0.12);
-            color: #60a5fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-bottom: 18px;
+            font-size: 26px;
+
+            margin-bottom: 12px;
         }
 
         .feature-card h3 {
-            margin-bottom: 8px;
-            font-size: 18px;
+            margin: 0 0 7px;
+
+            font-size: 17px;
         }
 
         .feature-card p {
+            margin: 0;
+
             color: #9ca3af;
-            font-size: 14px;
+
+            font-size: 13px;
+
+            line-height: 1.6;
         }
 
         /* =========================
-           PRO SECTION
+           PRO
         ========================= */
 
         .pro-section {
             background: #0f172a;
+
+            border-top: 1px solid rgba(55, 65, 81, 0.45);
+            border-bottom: 1px solid rgba(55, 65, 81, 0.45);
         }
 
         .pro-card {
-            max-width: 900px;
-            margin: 0 auto;
-            background: linear-gradient(145deg, #1f2937, #172033);
-            border: 1px solid #374151;
-            border-radius: 20px;
-            padding: 50px 35px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+            max-width: 820px;
 
-        .pro-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #3b82f6;
+            margin: 0 auto;
+
+            padding: 34px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1f2937,
+                    #172033
+                );
+
+            border: 1px solid #374151;
+
+            border-radius: 16px;
+
+            text-align: center;
         }
 
         .pro-badge {
             display: inline-block;
-            background: rgba(59, 130, 246, 0.12);
-            border: 1px solid rgba(59, 130, 246, 0.35);
-            color: #60a5fa;
-            padding: 6px 13px;
+
+            padding: 5px 10px;
+
+            margin-bottom: 12px;
+
             border-radius: 999px;
+
+            background: rgba(59, 130, 246, 0.12);
+
+            border: 1px solid rgba(59, 130, 246, 0.25);
+
+            color: #93c5fd;
+
             font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 18px;
+            font-weight: 800;
         }
 
         .pro-card h2 {
-            font-size: 40px;
-            line-height: 1.15;
-            margin-bottom: 14px;
+            margin: 0;
+
+            font-size: 30px;
         }
 
-        .pro-card .pro-intro {
+        .pro-card p {
+            max-width: 600px;
+
+            margin: 12px auto 20px;
+
             color: #9ca3af;
-            max-width: 650px;
-            margin: 0 auto 30px;
-            font-size: 16px;
-        }
 
-        .pro-features {
-            max-width: 650px;
-            margin: 0 auto 30px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            text-align: left;
-        }
-
-        .pro-feature {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 10px;
-            padding: 14px 16px;
-            color: #d1d5db;
             font-size: 14px;
         }
 
-        .pro-feature::before {
-            content: "✓";
-            color: #3b82f6;
-            font-weight: bold;
-            margin-right: 9px;
+        .pro-features {
+            display: flex;
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            margin-bottom: 22px;
         }
 
-        .pro-card .btn-primary {
-            padding: 15px 30px;
-            font-size: 16px;
-        }
+        .pro-feature {
+            padding: 8px 11px;
 
-        .pro-note {
-            margin-top: 15px;
-            color: #6b7280;
+            border-radius: 8px;
+
+            background: #111827;
+
+            border: 1px solid #374151;
+
+            color: #d1d5db;
+
             font-size: 12px;
+        }
+
+        .pro-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-height: 46px;
+
+            padding: 12px 22px;
+
+            border-radius: 9px;
+
+            background: #3b82f6;
+
+            color: white;
+
+            font-weight: 800;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .pro-btn:hover {
+            background: #2563eb;
+
+            transform: translateY(-1px);
         }
 
         /* =========================
            HOW IT WORKS
         ========================= */
 
-        .how-section {
-            background: #111827;
-        }
-
         .steps {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
         }
 
         .step {
             text-align: center;
-            padding: 20px;
+
+            padding: 22px;
         }
 
         .step-number {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #3b82f6;
-            color: white;
+            width: 40px;
+            height: 40px;
+
+            margin: 0 auto 12px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 18px;
+
+            border-radius: 50%;
+
+            background: rgba(59, 130, 246, 0.12);
+
+            border: 1px solid rgba(59, 130, 246, 0.25);
+
+            color: #93c5fd;
+
             font-weight: 800;
         }
 
         .step h3 {
-            margin-bottom: 8px;
+            margin: 0 0 6px;
+
+            font-size: 16px;
         }
 
         .step p {
+            margin: 0;
+
             color: #9ca3af;
-            font-size: 14px;
+
+            font-size: 13px;
         }
 
         /* =========================
@@ -889,178 +1136,243 @@
         ========================= */
 
         footer {
-            border-top: 1px solid #1f2937;
-            background: #0f172a;
+            border-top: 1px solid #374151;
+
+            padding: 32px 24px;
+
+            color: #6b7280;
+
+            font-size: 12px;
         }
 
         .footer-container {
             max-width: 1100px;
+
             margin: 0 auto;
-            padding: 30px 20px;
+
             display: flex;
-            justify-content: space-between;
+
             align-items: center;
+            justify-content: space-between;
+
             gap: 20px;
-        }
-
-        .footer-brand {
-            color: #9ca3af;
-            font-size: 13px;
-        }
-
-        .footer-brand strong {
-            color: #ffffff;
         }
 
         .footer-links {
             display: flex;
+
             gap: 18px;
-            font-size: 13px;
-            color: #9ca3af;
+
+            flex-wrap: wrap;
         }
 
         .footer-links a:hover {
-            color: white;
+            color: #d1d5db;
         }
 
         /* =========================
-           MOBILE
+           TABLET
         ========================= */
 
         @media (max-width: 800px) {
 
-            .nav-links {
-                gap: 12px;
+            .nav-container {
+                min-height: 62px;
+
+                padding:
+                    0 18px;
             }
 
-            .nav-links a {
-                font-size: 12px;
+            .nav-links {
+                gap: 16px;
+
+                font-size: 13px;
             }
 
             .hero {
-                min-height: 580px;
-                padding: 60px 20px;
-            }
-
-            .hero-logo {
-                width: 110px;
-                height: 110px;
+                padding:
+                    70px 20px
+                    55px;
             }
 
             .hero h1 {
-                font-size: 52px;
-                letter-spacing: -2px;
+                letter-spacing: -1.5px;
             }
 
-            .hero p {
-                font-size: 16px;
+            .section {
+                padding:
+                    55px 20px;
             }
 
-            .action-buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .feature-grid,
-            .steps {
-                grid-template-columns: 1fr;
-            }
-
-            .pro-features {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-container {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .video-preview {
-                max-width: 100%;
-                padding: 16px;
+            .tool-card {
+                padding: 24px;
             }
 
             .preview-video-container video {
                 max-height: 380px;
                 min-height: 180px;
             }
+
+            .features-grid,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
         }
+
+        /* =========================
+           PHONE
+        ========================= */
 
         @media (max-width: 500px) {
 
             .nav-container {
-                padding: 14px 15px;
+                min-height: 58px;
+
+                padding:
+                    0 14px;
+
+                gap: 10px;
             }
 
             .nav-logo {
-                font-size: 19px;
+                font-size: 16px;
+
+                gap: 7px;
+            }
+
+            .nav-logo img {
+                width: 28px;
+                height: 28px;
             }
 
             .nav-links {
-                gap: 8px;
-            }
+                gap: 10px;
 
-            .nav-links a {
                 font-size: 11px;
             }
 
             .hero {
-                padding: 50px 15px;
+                padding:
+                    48px 16px
+                    42px;
+            }
+
+            .hero-icon {
+                width: 64px;
+                height: 64px;
+
+                margin-bottom: 16px;
+            }
+
+            .hero-badge {
+                margin-bottom: 14px;
+
+                padding:
+                    5px 10px;
+
+                font-size: 11px;
             }
 
             .hero h1 {
-                font-size: 44px;
+                font-size: 40px;
+
+                letter-spacing: -1.3px;
+            }
+
+            .hero p {
+                margin-top: 16px;
+
+                font-size: 14px;
+
+                line-height: 1.6;
             }
 
             .hero-buttons {
+                margin-top: 24px;
+
                 flex-direction: column;
+
+                gap: 9px;
             }
 
-            .hero-buttons .btn {
+            .hero-btn {
                 width: 100%;
+
+                min-height: 46px;
             }
 
-            .section-container {
-                padding: 60px 15px;
+            .trust-line {
+                margin-top: 14px;
+
+                font-size: 11px;
+            }
+
+            .section {
+                padding:
+                    42px 14px;
+            }
+
+            .section-heading {
+                margin-bottom: 24px;
+            }
+
+            .section-heading h2 {
+                font-size: 27px;
+            }
+
+            .section-heading p {
+                font-size: 13px;
             }
 
             .tool-card {
                 padding: 18px;
-            }
 
-            .file-area {
-                padding: 35px 15px;
-            }
-
-            .action-buttons {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .ad-section {
-                padding: 0 15px;
-            }
-
-            .pro-card {
-                padding: 40px 20px;
-            }
-
-            .pro-card h2 {
-                font-size: 32px;
-            }
-
-            .video-preview {
-                margin-top: 24px;
-                padding: 14px;
                 border-radius: 14px;
             }
 
-            .preview-header {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 8px;
+            .tool-title {
+                font-size: 20px;
             }
 
-            .preview-status {
-                display: none;
+            .tool-subtitle {
+                margin-bottom: 18px;
+
+                font-size: 13px;
+            }
+
+            .file-picker {
+                padding:
+                    26px 14px;
+            }
+
+            .file-picker-icon {
+                font-size: 28px;
+            }
+
+            .file-picker-title {
+                font-size: 14px;
+            }
+
+            .file-picker-text {
+                font-size: 11px;
+            }
+
+            .selected-file {
+                font-size: 12px;
+            }
+
+            .video-preview {
+                margin-top: 22px;
+
+                padding: 14px;
+
+                border-radius: 13px;
             }
 
             .preview-video-container video {
@@ -1068,11 +1380,30 @@
                 min-height: 160px;
             }
 
-            .preview-note {
-                font-size: 11px;
+            .actions {
+                margin-top: 18px;
+
+                gap: 8px;
+            }
+
+            .action-btn {
+                min-height: 46px;
+
+                padding:
+                    10px 8px;
+
+                font-size: 12px;
+            }
+
+            .process-btn {
+                min-height: 50px;
+
+                margin-top: 14px;
             }
 
             .progress-panel {
+                margin-top: 18px;
+
                 padding: 16px;
             }
 
@@ -1085,7 +1416,8 @@
             }
 
             .download-area {
-                padding: 20px 16px;
+                padding:
+                    20px 16px;
             }
 
             .download-title {
@@ -1094,6 +1426,50 @@
 
             .download-btn {
                 width: 100%;
+            }
+
+            .ad-placeholder {
+                min-height: 70px;
+
+                margin-top: 22px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .pro-card {
+                padding:
+                    26px 18px;
+            }
+
+            .pro-card h2 {
+                font-size: 26px;
+            }
+
+            .pro-card p {
+                font-size: 13px;
+            }
+
+            .pro-feature {
+                font-size: 11px;
+            }
+
+            .pro-btn {
+                width: 100%;
+            }
+
+            footer {
+                padding:
+                    26px 16px;
+            }
+
+            .footer-container {
+                gap: 14px;
+            }
+
+            .footer-links {
+                gap: 12px;
             }
         }
     </style>
@@ -1108,62 +1484,77 @@
     <nav class="navbar">
         <div class="nav-container">
 
-            <a href="#" class="nav-logo">
-                Flip<span>Vid</span>
+            <a
+                href="#top"
+                class="nav-logo"
+            >
+                <img
+                    src="assets/FlipVid.ico"
+                    alt="FlipVid"
+                >
+
+                <span>FlipVid</span>
             </a>
 
             <div class="nav-links">
-                <a href="#online">Online Tool</a>
-                <a href="#features">Features</a>
-                <a href="#pro">Pro</a>
+
+                <a href="#tool">
+                    Online Tool
+                </a>
+
+                <a href="#features">
+                    Features
+                </a>
+
+                <a href="#pro">
+                    Pro
+                </a>
+
             </div>
 
         </div>
     </nav>
 
 
-    <!-- =========================
-         HERO
-    ========================= -->
+    <main id="top">
 
-    <header class="hero">
+        <!-- =========================
+             HERO
+        ========================= -->
 
-        <div class="hero-content">
+        <section class="hero">
 
-            <div class="hero-logo-container">
-                <img
-                    src="assets/FlipVid.ico"
-                    alt="FlipVid"
-                    class="hero-logo"
-                >
-            </div>
+            <img
+                src="assets/FlipVid.ico"
+                alt="FlipVid"
+                class="hero-icon"
+            >
 
             <div class="hero-badge">
                 Free online video tool
             </div>
 
             <h1>
-                Flip. Rotate. <span>Done.</span>
+                Flip. Rotate. Done.
             </h1>
 
             <p>
-                Fix your video's orientation in seconds.
-                Flip and rotate videos without complicated
-                video editing software.
+                Quickly flip or rotate your videos right in your browser.
+                No complicated video editor required.
             </p>
 
             <div class="hero-buttons">
 
                 <a
-                    href="#online"
-                    class="btn btn-primary"
+                    href="#tool"
+                    class="hero-btn hero-btn-primary"
                 >
                     Use FlipVid Online
                 </a>
 
                 <a
                     href="#pro"
-                    class="btn btn-secondary"
+                    class="hero-btn hero-btn-secondary"
                 >
                     Get FlipVid Pro
                 </a>
@@ -1171,149 +1562,129 @@
             </div>
 
             <div class="trust-line">
-                Free • Browser Based • No Installation
+                Free to use • No signup required • Browser-based
             </div>
 
-        </div>
-
-    </header>
+        </section>
 
 
-    <!-- =========================
-         ONLINE TOOL
-    ========================= -->
+        <!-- =========================
+             TOOL
+        ========================= -->
 
-    <section
-        class="tool-section"
-        id="online"
-    >
+        <section
+            class="tool-section"
+            id="tool"
+        >
 
-        <div class="section-container">
+            <div class="section">
 
-            <div class="section-heading">
+                <div class="section-heading">
 
-                <h2>Use FlipVid Online</h2>
-
-                <p>
-                    Select a video, choose an action, and
-                    download your finished MP4. Your video
-                    is processed directly in your browser.
-                </p>
-
-            </div>
-
-
-            <div class="tool-card">
-
-                <div class="file-area">
-
-                    <h3>Select Your Video</h3>
+                    <h2>
+                        Flip or Rotate Your Video
+                    </h2>
 
                     <p>
-                        Choose an MP4, MOV, AVI, MKV, WEBM or M4V video.
+                        Select a video, choose an action, and download
+                        your processed MP4.
                     </p>
 
-                    <label
-                        for="videoInput"
-                        class="btn btn-primary"
-                    >
-                        Choose Video
+                </div>
+
+
+                <div class="tool-card">
+
+                    <h3 class="tool-title">
+                        Select Your Video
+                    </h3>
+
+                    <p class="tool-subtitle">
+                        MP4, MOV, AVI, MKV, WEBM, or M4V
+                    </p>
+
+
+                    <label class="file-picker">
+
+                        <input
+                            type="file"
+                            id="videoInput"
+                            accept="video/*"
+                        >
+
+                        <div class="file-picker-icon">
+                            ↑
+                        </div>
+
+                        <div class="file-picker-title">
+                            Choose a video
+                        </div>
+
+                        <div class="file-picker-text">
+                            Click here to select a video from your device
+                        </div>
+
                     </label>
 
-                    <input
-                        type="file"
-                        id="videoInput"
-                        accept="video/*"
-                    >
 
                     <div
-                        class="file-name"
-                        id="fileName"
+                        class="selected-file"
+                        id="selectedFile"
                     >
-                        No video selected
                     </div>
 
-                </div>
 
+                    <!-- VIDEO PREVIEW -->
 
-                <!-- =========================
-                     POLISHED VIDEO PREVIEW
-                ========================= -->
+                    <div
+                        class="video-preview"
+                        id="videoPreview"
+                    >
 
-                <div
-                    class="video-preview"
-                    id="videoPreview"
-                >
-
-                    <div class="preview-header">
-
-                        <div class="preview-title">
-
-                            <div class="preview-icon">
-                                ▶
-                            </div>
-
-                            <span>
-                                Video Preview
-                            </span>
-
+                        <div class="preview-label">
+                            Video Preview
                         </div>
 
-                        <div class="preview-status">
-                            Preview only
+                        <div class="preview-video-container">
+
+                            <video
+                                id="previewVideo"
+                                controls
+                                playsinline
+                            ></video>
+
                         </div>
 
                     </div>
 
 
-                    <div class="preview-video-container">
+                    <!-- ACTION BUTTONS -->
 
-                        <video
-                            id="previewVideo"
-                            controls
-                            playsinline
-                            preload="metadata"
-                        >
-                            Your browser does not support video playback.
-                        </video>
-
-                    </div>
-
-
-                    <div class="preview-note">
-                        <span>
-                            Preview only — your original video is unchanged.
-                        </span>
-                    </div>
-
-                </div>
-
-
-                <div class="controls">
-
-                    <div class="control-title">
-                        Choose an action
-                    </div>
-
-                    <div class="action-buttons">
+                    <div
+                        class="actions"
+                        id="actions"
+                    >
 
                         <button
                             class="action-btn"
                             data-action="flipH"
+                            type="button"
                         >
-                            ↔ Flip Horizontal
+                            ↔ Horizontal Flip
                         </button>
 
                         <button
                             class="action-btn"
                             data-action="flipV"
+                            type="button"
                         >
-                            ↕ Flip Vertical
+                            ↕ Vertical Flip
                         </button>
 
                         <button
                             class="action-btn"
                             data-action="rotate90"
+                            type="button"
                         >
                             ↻ Rotate 90°
                         </button>
@@ -1321,6 +1692,7 @@
                         <button
                             class="action-btn"
                             data-action="rotate180"
+                            type="button"
                         >
                             ⟳ Rotate 180°
                         </button>
@@ -1328,168 +1700,157 @@
                         <button
                             class="action-btn"
                             data-action="rotate270"
+                            type="button"
                         >
                             ↺ Rotate 270°
                         </button>
 
                     </div>
 
-                </div>
 
-
-                <div class="process-area">
+                    <!-- PROCESS -->
 
                     <button
                         class="process-btn"
                         id="processBtn"
+                        type="button"
                     >
                         Process Video
                     </button>
 
-                </div>
 
+                    <!-- PROGRESS -->
 
-                <!-- =========================
-                     PROCESSING STATUS
-                ========================= -->
+                    <div
+                        class="progress-panel"
+                        id="progressPanel"
+                    >
 
-                <div
-                    class="progress-panel"
-                    id="progressPanel"
-                >
-
-                    <div class="progress-header">
-
-                        <div
-                            class="progress-spinner"
-                            id="progressSpinner"
-                        ></div>
-
-                        <div class="progress-info">
+                        <div class="progress-header">
 
                             <div
-                                class="progress-title"
-                                id="progressTitle"
-                            >
-                                Processing Your Video
+                                class="progress-spinner"
+                                id="progressSpinner"
+                            ></div>
+
+                            <div>
+
+                                <div
+                                    class="progress-title"
+                                    id="progressTitle"
+                                >
+                                    Processing Video
+                                </div>
+
+                                <div
+                                    class="progress-text"
+                                    id="progressText"
+                                >
+                                    Preparing your video...
+                                </div>
+
                             </div>
 
+                        </div>
+
+                        <div class="progress-bar">
+
                             <div
-                                class="progress-text"
-                                id="progressText"
-                            >
-                                Preparing video...
-                            </div>
+                                class="progress-fill"
+                                id="progressFill"
+                            ></div>
 
                         </div>
 
                     </div>
 
 
-                    <div class="progress-bar">
+                    <!-- ERROR -->
+
+                    <div
+                        class="error-message"
+                        id="errorMessage"
+                    ></div>
+
+
+                    <!-- DOWNLOAD RESULT -->
+
+                    <div
+                        class="download-area"
+                        id="downloadArea"
+                    >
+
+                        <div class="download-success-icon">
+                            ✓
+                        </div>
+
+                        <div class="download-title">
+                            Video Ready
+                        </div>
+
+                        <div class="download-message">
+                            Your video has been processed successfully.
+                        </div>
 
                         <div
-                            class="progress-fill"
-                            id="progressFill"
-                        ></div>
+                            class="download-filename"
+                            id="downloadFilename"
+                        >
+                        </div>
+
+                        <a
+                            href="#"
+                            class="download-btn"
+                            id="downloadBtn"
+                            download
+                        >
+
+                            <span class="download-btn-icon">
+                                ↓
+                            </span>
+
+                            Download MP4
+
+                        </a>
 
                     </div>
 
                 </div>
 
 
-                <div
-                    class="error-message"
-                    id="errorMessage"
-                ></div>
-
-
-                <!-- =========================
-                     POLISHED RESULT
-                ========================= -->
-
-                <div
-                    class="download-area"
-                    id="downloadArea"
-                >
-
-                    <div class="download-success-icon">
-                        ✓
-                    </div>
-
-                    <div class="download-title">
-                        Video Ready
-                    </div>
-
-                    <div class="download-message">
-                        Your video has been processed successfully.
-                    </div>
-
-                    <div
-                        class="download-filename"
-                        id="downloadFilename"
-                    >
-                    </div>
-
-                    <a
-                        href="#"
-                        class="download-btn"
-                        id="downloadBtn"
-                        download
-                    >
-                        <span class="download-btn-icon">
-                            ↓
-                        </span>
-
-                        Download MP4
-                    </a>
-
+                <div class="ad-placeholder">
+                    Advertisement
                 </div>
 
             </div>
 
-        </div>
-
-    </section>
+        </section>
 
 
-    <!-- =========================
-         AD PLACEHOLDER
-    ========================= -->
+        <!-- =========================
+             FEATURES
+        ========================= -->
 
-    <section class="ad-section">
-
-        <div class="ad-placeholder">
-            <span>ADVERTISEMENT</span>
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         FEATURES
-    ========================= -->
-
-    <section
-        class="features-section"
-        id="features"
-    >
-
-        <div class="section-container">
+        <section
+            class="section"
+            id="features"
+        >
 
             <div class="section-heading">
 
-                <h2>Simple. Fast. Focused.</h2>
+                <h2>
+                    Simple by Design
+                </h2>
 
                 <p>
-                    FlipVid does one job and keeps it simple:
-                    fixing the orientation of your videos.
+                    FlipVid focuses on the video orientation tasks
+                    you actually need.
                 </p>
 
             </div>
 
 
-            <div class="feature-grid">
+            <div class="features-grid">
 
                 <div class="feature-card">
 
@@ -1497,11 +1858,13 @@
                         ↔
                     </div>
 
-                    <h3>Flip Videos</h3>
+                    <h3>
+                        Flip Videos
+                    </h3>
 
                     <p>
-                        Flip your video horizontally or
-                        vertically with a single click.
+                        Flip your video horizontally or vertically
+                        with one click.
                     </p>
 
                 </div>
@@ -1510,14 +1873,16 @@
                 <div class="feature-card">
 
                     <div class="feature-icon">
-                        ⟳
+                        ↻
                     </div>
 
-                    <h3>Rotate Videos</h3>
+                    <h3>
+                        Rotate Videos
+                    </h3>
 
                     <p>
-                        Rotate videos 90°, 180° or 270°
-                        to get the orientation you need.
+                        Rotate videos by 90°, 180°, or 270°
+                        whenever you need to fix orientation.
                     </p>
 
                 </div>
@@ -1529,114 +1894,102 @@
                         ⚡
                     </div>
 
-                    <h3>Simple Processing</h3>
+                    <h3>
+                        Browser-Based
+                    </h3>
 
                     <p>
-                        No complicated timeline or editing
-                        tools. Just choose your action and process.
+                        Your video is processed directly in your
+                        browser without requiring an account.
                     </p>
 
                 </div>
 
             </div>
 
-        </div>
-
-    </section>
+        </section>
 
 
-    <!-- =========================
-         FLIPVID PRO
-    ========================= -->
+        <!-- =========================
+             PRO
+        ========================= -->
 
-    <section
-        class="pro-section"
-        id="pro"
-    >
+        <section
+            class="pro-section"
+            id="pro"
+        >
 
-        <div class="section-container">
+            <div class="section">
 
-            <div class="pro-card">
+                <div class="pro-card">
 
-                <div class="pro-badge">
-                    FLIPVID PRO
-                </div>
-
-                <h2>
-                    Need FlipVid on Windows?
-                </h2>
-
-                <p class="pro-intro">
-                    If you use FlipVid regularly, take it with you
-                    to the Windows desktop. FlipVid Pro gives you
-                    more control while keeping the same simple approach.
-                </p>
-
-
-                <div class="pro-features">
-
-                    <div class="pro-feature">
-                        Horizontal & vertical flipping
+                    <div class="pro-badge">
+                        FLIPVID PRO
                     </div>
 
-                    <div class="pro-feature">
-                        Rotate 90°, 180° & 270°
+                    <h2>
+                        More Power. Same Simplicity.
+                    </h2>
+
+                    <p>
+                        Need a dedicated Windows utility?
+                        FlipVid Pro gives you a fast desktop
+                        workflow for flipping and rotating videos.
+                    </p>
+
+
+                    <div class="pro-features">
+
+                        <div class="pro-feature">
+                            Horizontal Flip
+                        </div>
+
+                        <div class="pro-feature">
+                            Vertical Flip
+                        </div>
+
+                        <div class="pro-feature">
+                            90° / 180° / 270°
+                        </div>
+
+                        <div class="pro-feature">
+                            Batch Processing
+                        </div>
+
+                        <div class="pro-feature">
+                            Quality Options
+                        </div>
+
                     </div>
 
-                    <div class="pro-feature">
-                        Batch video processing
-                    </div>
 
-                    <div class="pro-feature">
-                        Fast, Balanced & High Quality modes
-                    </div>
+                    <a
+                        href="https://payhip.com/b/8pFXn"
+                        class="pro-btn"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Get FlipVid Pro
+                    </a>
 
-                    <div class="pro-feature">
-                        Dedicated Windows application
-                    </div>
-
-                    <div class="pro-feature">
-                        No complicated video editor
-                    </div>
-
-                </div>
-
-
-                <a
-                    href="https://payhip.com/b/8pFXn"
-                    target="_blank"
-                    rel="noopener"
-                    class="btn btn-primary"
-                >
-                    Get FlipVid Pro
-                </a>
-
-                <div class="pro-note">
-                    One simple purchase. No complicated subscription.
                 </div>
 
             </div>
 
-        </div>
-
-    </section>
+        </section>
 
 
-    <!-- =========================
-         HOW IT WORKS
-    ========================= -->
+        <!-- =========================
+             HOW IT WORKS
+        ========================= -->
 
-    <section class="how-section">
-
-        <div class="section-container">
+        <section class="section">
 
             <div class="section-heading">
 
-                <h2>How It Works</h2>
-
-                <p>
-                    Three simple steps.
-                </p>
+                <h2>
+                    How It Works
+                </h2>
 
             </div>
 
@@ -1649,10 +2002,12 @@
                         1
                     </div>
 
-                    <h3>Select</h3>
+                    <h3>
+                        Select
+                    </h3>
 
                     <p>
-                        Choose the video you want to fix.
+                        Choose the video you want to change.
                     </p>
 
                 </div>
@@ -1664,10 +2019,12 @@
                         2
                     </div>
 
-                    <h3>Flip or Rotate</h3>
+                    <h3>
+                        Adjust
+                    </h3>
 
                     <p>
-                        Choose the orientation you need.
+                        Pick a flip or rotation option.
                     </p>
 
                 </div>
@@ -1679,19 +2036,21 @@
                         3
                     </div>
 
-                    <h3>Download</h3>
+                    <h3>
+                        Download
+                    </h3>
 
                     <p>
-                        Download your finished MP4 video.
+                        Process your video and download the MP4.
                     </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
-    </section>
+    </main>
 
 
     <!-- =========================
@@ -1699,51 +2058,68 @@
     ========================= -->
 
     <footer>
+
         <div class="footer-container">
 
-            <div class="footer-brand">
-                © 2026 <strong>Pixlmart Utilities</strong> · FlipVid
+            <div>
+                © 2026 Pixlmart Utilities
             </div>
 
             <div class="footer-links">
-                <a href="about.html">About</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms of Use</a>
+
+                <a href="about.html">
+                    About
+                </a>
+
+                <a href="privacy.html">
+                    Privacy
+                </a>
+
+                <a href="terms.html">
+                    Terms
+                </a>
+
             </div>
 
         </div>
+
     </footer>
 
 
     <!-- =========================
-         FLIPVID JAVASCRIPT
+         FFMPEG
     ========================= -->
 
-    <script>
+    <script src="ffmpeg/ffmpeg.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+
+
+    <script>
         const { FFmpeg } = FFmpegWASM;
-        const { toBlobURL, fetchFile } = FFmpegUtil;
+
+        const {
+            toBlobURL,
+            fetchFile
+        } = FFmpegUtil;
 
         const ffmpeg = new FFmpeg();
-
-        let ffmpegLoaded = false;
-        let selectedFile = null;
-        let selectedAction = null;
-        let currentDownloadUrl = null;
-        let currentPreviewUrl = null;
 
 
         const videoInput =
             document.getElementById("videoInput");
 
-        const fileName =
-            document.getElementById("fileName");
+        const selectedFile =
+            document.getElementById("selectedFile");
+
+        const videoPreview =
+            document.getElementById("videoPreview");
 
         const previewVideo =
             document.getElementById("previewVideo");
 
-        const videoPreview =
-            document.getElementById("videoPreview");
+        const actions =
+            document.getElementById("actions");
 
         const processBtn =
             document.getElementById("processBtn");
@@ -1763,6 +2139,9 @@
         const progressFill =
             document.getElementById("progressFill");
 
+        const errorMessage =
+            document.getElementById("errorMessage");
+
         const downloadArea =
             document.getElementById("downloadArea");
 
@@ -1772,11 +2151,43 @@
         const downloadFilename =
             document.getElementById("downloadFilename");
 
-        const errorMessage =
-            document.getElementById("errorMessage");
 
-        const actionButtons =
-            document.querySelectorAll(".action-btn");
+        let selectedVideo = null;
+
+        let selectedAction = null;
+
+        let ffmpegLoaded = false;
+
+        let currentDownloadUrl = null;
+
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        document
+            .querySelectorAll(".action-btn")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(".action-btn")
+                            .forEach(btn => {
+                                btn.classList.remove("active");
+                            });
+
+                        button.classList.add("active");
+
+                        selectedAction =
+                            button.dataset.action;
+
+                    }
+                );
+
+            });
 
 
         /* =========================
@@ -1785,106 +2196,66 @@
 
         videoInput.addEventListener(
             "change",
-            function () {
+            () => {
 
-                if (!this.files || !this.files.length) {
+                const file =
+                    videoInput.files[0];
+
+                if (!file) {
                     return;
                 }
 
-                selectedFile = this.files[0];
+                selectedVideo = file;
 
-                fileName.textContent =
-                    selectedFile.name;
+                selectedFile.textContent =
+                    file.name;
+
+                selectedFile.classList.add("show");
+
+                errorMessage.classList.remove("show");
 
                 downloadArea.classList.remove("show");
 
                 downloadFilename.textContent = "";
 
-                errorMessage.classList.remove("show");
-
-                progressPanel.classList.remove("show");
-
-                progressFill.style.width = "0%";
-
-                progressFill.classList.remove("complete");
-
-                progressSpinner.classList.remove(
-                    "complete",
-                    "error"
-                );
-
-                progressTitle.textContent =
-                    "Processing Your Video";
-
-
-                /* =========================
-                   RESET PREVIOUS PREVIEW
-                ========================= */
-
-                if (currentPreviewUrl) {
-
+                if (currentDownloadUrl) {
                     URL.revokeObjectURL(
-                        currentPreviewUrl
+                        currentDownloadUrl
                     );
 
-                    currentPreviewUrl = null;
-
+                    currentDownloadUrl = null;
                 }
 
 
-                previewVideo.pause();
+                /* Preview */
 
-                previewVideo.removeAttribute("src");
-
-                previewVideo.load();
-
-
-                /* =========================
-                   CREATE NEW PREVIEW
-                ========================= */
-
-                currentPreviewUrl =
-                    URL.createObjectURL(
-                        selectedFile
-                    );
-
+                const previewUrl =
+                    URL.createObjectURL(file);
 
                 previewVideo.src =
-                    currentPreviewUrl;
+                    previewUrl;
+
+                videoPreview.classList.add("show");
 
 
-                videoPreview.classList.add(
-                    "show"
-                );
+                /* Actions */
 
-            }
-        );
+                actions.classList.add("show");
 
+                processBtn.classList.add("show");
 
-        /* =========================
-           ACTION SELECTION
-        ========================= */
+                processBtn.textContent =
+                    "Process Video";
 
-        actionButtons.forEach(
-            function (button) {
+                processBtn.disabled = false;
 
-                button.addEventListener(
-                    "click",
-                    function () {
+                selectedAction = null;
 
-                        actionButtons.forEach(
-                            function (btn) {
-                                btn.classList.remove("active");
-                            }
-                        );
-
-                        this.classList.add("active");
-
-                        selectedAction =
-                            this.dataset.action;
-
-                    }
-                );
+                document
+                    .querySelectorAll(".action-btn")
+                    .forEach(btn => {
+                        btn.classList.remove("active");
+                    });
 
             }
         );
@@ -1894,14 +2265,16 @@
            PROGRESS
         ========================= */
 
-        function setProgress(message, percent) {
+        function setProgress(
+            message,
+            percent
+        ) {
 
             progressText.textContent =
                 message;
 
             progressFill.style.width =
                 percent + "%";
-
         }
 
 
@@ -1918,27 +2291,23 @@
             const baseURL =
                 "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd";
 
-            setProgress(
-                "Loading the video engine...",
-                15
-            );
-
             await ffmpeg.load({
 
-                coreURL: await toBlobURL(
-                    `${baseURL}/ffmpeg-core.js`,
-                    "text/javascript"
-                ),
+                coreURL:
+                    await toBlobURL(
+                        `${baseURL}/ffmpeg-core.js`,
+                        "text/javascript"
+                    ),
 
-                wasmURL: await toBlobURL(
-                    `${baseURL}/ffmpeg-core.wasm`,
-                    "application/wasm"
-                )
+                wasmURL:
+                    await toBlobURL(
+                        `${baseURL}/ffmpeg-core.wasm`,
+                        "application/wasm"
+                    )
 
             });
 
             ffmpegLoaded = true;
-
         }
 
 
@@ -1948,30 +2317,26 @@
 
         processBtn.addEventListener(
             "click",
-            async function () {
+            async () => {
 
-                errorMessage.classList.remove("show");
-                downloadArea.classList.remove("show");
-
-                if (!selectedFile) {
-
-                    errorMessage.textContent =
-                        "Please select a video first.";
-
-                    errorMessage.classList.add("show");
-
+                if (!selectedVideo) {
                     return;
                 }
 
                 if (!selectedAction) {
 
                     errorMessage.textContent =
-                        "Please choose an action first.";
+                        "Please choose a flip or rotation option.";
 
                     errorMessage.classList.add("show");
 
                     return;
                 }
+
+
+                errorMessage.classList.remove("show");
+
+                downloadArea.classList.remove("show");
 
 
                 processBtn.disabled = true;
@@ -1979,11 +2344,6 @@
                 processBtn.textContent =
                     "Processing...";
 
-                actionButtons.forEach(
-                    function (button) {
-                        button.disabled = true;
-                    }
-                );
 
                 progressPanel.classList.add("show");
 
@@ -1992,12 +2352,12 @@
                     "error"
                 );
 
-                progressTitle.textContent =
-                    "Processing Your Video";
-
                 progressFill.classList.remove(
                     "complete"
                 );
+
+                progressTitle.textContent =
+                    "Processing Video";
 
 
                 try {
@@ -2007,6 +2367,17 @@
                         5
                     );
 
+
+                    await new Promise(
+                        resolve =>
+                            setTimeout(resolve, 150)
+                    );
+
+
+                    setProgress(
+                        "Loading the video engine...",
+                        15
+                    );
 
                     await loadFFmpeg();
 
@@ -2019,28 +2390,19 @@
 
                     const inputName =
                         "input." +
-                        (
-                            selectedFile.name
-                                .split(".")
-                                .pop()
-                                .toLowerCase()
-                        );
-
-
-                    const outputName =
-                        selectedFile.name.replace(
-                            /\.[^/.]+$/,
-                            ""
-                        ) + "-FlipVid.mp4";
+                        selectedVideo.name
+                            .split(".")
+                            .pop()
+                            .toLowerCase();
 
 
                     await ffmpeg.writeFile(
                         inputName,
-                        await fetchFile(selectedFile)
+                        await fetchFile(selectedVideo)
                     );
 
 
-                    let filter;
+                    let filter = "";
 
 
                     switch (selectedAction) {
@@ -2065,9 +2427,6 @@
                             filter = "transpose=2";
                             break;
 
-                        default:
-                            filter = "hflip";
-
                     }
 
 
@@ -2075,6 +2434,15 @@
                         "Applying your changes...",
                         45
                     );
+
+
+                    const outputName =
+                        selectedVideo.name
+                            .replace(
+                                /\.[^/.]+$/,
+                                ""
+                            ) +
+                        "-FlipVid.mp4";
 
 
                     await ffmpeg.exec([
@@ -2130,26 +2498,20 @@
                         );
 
 
-                    if (currentDownloadUrl) {
-
-                        URL.revokeObjectURL(
-                            currentDownloadUrl
-                        );
-
-                    }
-
-
                     const blob =
                         new Blob(
                             [data.buffer],
                             {
-                                type: "video/mp4"
+                                type:
+                                    "video/mp4"
                             }
                         );
 
 
                     currentDownloadUrl =
-                        URL.createObjectURL(blob);
+                        URL.createObjectURL(
+                            blob
+                        );
 
 
                     downloadBtn.href =
@@ -2179,10 +2541,13 @@
                     progressTitle.textContent =
                         "Video Ready";
 
+
                     downloadArea.classList.add(
                         "show"
                     );
 
+
+                    processBtn.disabled = false;
 
                     processBtn.textContent =
                         "Process Another Video";
@@ -2192,31 +2557,21 @@
 
                     console.error(error);
 
+                    progressPanel.classList.remove(
+                        "show"
+                    );
+
                     errorMessage.textContent =
-                        "Something went wrong while processing the video. Please try again.";
+                        "Something went wrong while processing your video. Please try again.";
 
                     errorMessage.classList.add(
                         "show"
                     );
 
-                    progressPanel.classList.remove(
-                        "show"
-                    );
-
-                    progressSpinner.classList.add(
-                        "error"
-                    );
-
-
-                } finally {
-
                     processBtn.disabled = false;
 
-                    actionButtons.forEach(
-                        function (button) {
-                            button.disabled = false;
-                        }
-                    );
+                    processBtn.textContent =
+                        "Process Video";
 
                 }
 
@@ -2230,15 +2585,62 @@
 
         processBtn.addEventListener(
             "click",
-            function () {
+            () => {
 
                 if (
                     processBtn.textContent ===
                     "Process Another Video"
                 ) {
 
-                    processBtn.textContent =
-                        "Process Video";
+                    videoInput.value = "";
+
+                    selectedVideo = null;
+
+                    selectedAction = null;
+
+                    selectedFile.classList.remove(
+                        "show"
+                    );
+
+                    videoPreview.classList.remove(
+                        "show"
+                    );
+
+                    actions.classList.remove(
+                        "show"
+                    );
+
+                    progressPanel.classList.remove(
+                        "show"
+                    );
+
+                    downloadArea.classList.remove(
+                        "show"
+                    );
+
+                    errorMessage.classList.remove(
+                        "show"
+                    );
+
+                    document
+                        .querySelectorAll(".action-btn")
+                        .forEach(btn => {
+                            btn.classList.remove(
+                                "active"
+                            );
+                        });
+
+                    previewVideo.pause();
+
+                    previewVideo.removeAttribute(
+                        "src"
+                    );
+
+                    previewVideo.load();
+
+                    processBtn.classList.remove(
+                        "show"
+                    );
 
                 }
 
@@ -2247,27 +2649,23 @@
 
 
         /* =========================
-           CLEAN UP OBJECT URLS
+           CLEANUP
         ========================= */
 
         window.addEventListener(
             "beforeunload",
-            function () {
-
-                if (currentPreviewUrl) {
-
-                    URL.revokeObjectURL(
-                        currentPreviewUrl
-                    );
-
-                }
+            () => {
 
                 if (currentDownloadUrl) {
-
                     URL.revokeObjectURL(
                         currentDownloadUrl
                     );
+                }
 
+                if (previewVideo.src) {
+                    URL.revokeObjectURL(
+                        previewVideo.src
+                    );
                 }
 
             }
