@@ -451,23 +451,100 @@
             cursor: not-allowed;
         }
 
+        /* =========================
+           PROCESSING STATUS
+        ========================= */
+
         .progress-panel {
             display: none;
             margin-top: 22px;
-            padding: 18px;
+            padding: 20px;
             background: #111827;
-            border-radius: 10px;
+            border-radius: 12px;
             border: 1px solid #374151;
+            text-align: left;
         }
 
         .progress-panel.show {
             display: block;
         }
 
+        .progress-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .progress-spinner {
+            width: 22px;
+            height: 22px;
+            border: 3px solid #374151;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: flipvid-spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        .progress-spinner.complete {
+            border: 0;
+            background: #10b981;
+            position: relative;
+            animation: none;
+        }
+
+        .progress-spinner.complete::after {
+            content: "✓";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .progress-spinner.error {
+            border: 0;
+            background: #ef4444;
+            position: relative;
+            animation: none;
+        }
+
+        .progress-spinner.error::after {
+            content: "!";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        @keyframes flipvid-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-info {
+            min-width: 0;
+        }
+
+        .progress-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #f9fafb;
+            line-height: 1.3;
+        }
+
         .progress-text {
-            font-size: 14px;
-            color: #d1d5db;
-            margin-bottom: 10px;
+            font-size: 13px;
+            color: #9ca3af;
+            margin-top: 2px;
         }
 
         .progress-bar {
@@ -483,6 +560,10 @@
             height: 100%;
             background: #3b82f6;
             transition: width 0.3s ease;
+        }
+
+        .progress-fill.complete {
+            background: #10b981;
         }
 
         .download-area {
@@ -912,6 +993,18 @@
             .preview-note {
                 font-size: 11px;
             }
+
+            .progress-panel {
+                padding: 16px;
+            }
+
+            .progress-title {
+                font-size: 14px;
+            }
+
+            .progress-text {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -1166,17 +1259,42 @@
                 </div>
 
 
+                <!-- =========================
+                     PROCESSING STATUS
+                ========================= -->
+
                 <div
                     class="progress-panel"
                     id="progressPanel"
                 >
 
-                    <div
-                        class="progress-text"
-                        id="progressText"
-                    >
-                        Preparing video...
+                    <div class="progress-header">
+
+                        <div
+                            class="progress-spinner"
+                            id="progressSpinner"
+                        ></div>
+
+                        <div class="progress-info">
+
+                            <div
+                                class="progress-title"
+                                id="progressTitle"
+                            >
+                                Processing Your Video
+                            </div>
+
+                            <div
+                                class="progress-text"
+                                id="progressText"
+                            >
+                                Preparing video...
+                            </div>
+
+                        </div>
+
                     </div>
+
 
                     <div class="progress-bar">
 
@@ -1517,6 +1635,12 @@
         const progressPanel =
             document.getElementById("progressPanel");
 
+        const progressSpinner =
+            document.getElementById("progressSpinner");
+
+        const progressTitle =
+            document.getElementById("progressTitle");
+
         const progressText =
             document.getElementById("progressText");
 
@@ -1560,6 +1684,16 @@
                 progressPanel.classList.remove("show");
 
                 progressFill.style.width = "0%";
+
+                progressFill.classList.remove("complete");
+
+                progressSpinner.classList.remove(
+                    "complete",
+                    "error"
+                );
+
+                progressTitle.textContent =
+                    "Processing Your Video";
 
 
                 /* =========================
@@ -1664,7 +1798,7 @@
                 "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd";
 
             setProgress(
-                "Loading FlipVid video engine...",
+                "Loading the video engine...",
                 15
             );
 
@@ -1721,6 +1855,9 @@
 
                 processBtn.disabled = true;
 
+                processBtn.textContent =
+                    "Processing...";
+
                 actionButtons.forEach(
                     function (button) {
                         button.disabled = true;
@@ -1729,11 +1866,23 @@
 
                 progressPanel.classList.add("show");
 
+                progressSpinner.classList.remove(
+                    "complete",
+                    "error"
+                );
+
+                progressTitle.textContent =
+                    "Processing Your Video";
+
+                progressFill.classList.remove(
+                    "complete"
+                );
+
 
                 try {
 
                     setProgress(
-                        "Preparing video...",
+                        "Preparing your video...",
                         5
                     );
 
@@ -1742,7 +1891,7 @@
 
 
                     setProgress(
-                        "Reading video...",
+                        "Reading your video...",
                         25
                     );
 
@@ -1802,7 +1951,7 @@
 
 
                     setProgress(
-                        "Processing video...",
+                        "Applying your changes...",
                         45
                     );
 
@@ -1849,7 +1998,7 @@
 
 
                     setProgress(
-                        "Preparing MP4 download...",
+                        "Preparing your MP4 download...",
                         85
                     );
 
@@ -1890,10 +2039,21 @@
 
 
                     setProgress(
-                        "Processing complete!",
+                        "Your video is ready!",
                         100
                     );
 
+
+                    progressFill.classList.add(
+                        "complete"
+                    );
+
+                    progressSpinner.classList.add(
+                        "complete"
+                    );
+
+                    progressTitle.textContent =
+                        "Video Ready";
 
                     downloadArea.classList.add(
                         "show"
@@ -1917,6 +2077,10 @@
 
                     progressPanel.classList.remove(
                         "show"
+                    );
+
+                    progressSpinner.classList.add(
+                        "error"
                     );
 
 
