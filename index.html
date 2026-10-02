@@ -282,6 +282,39 @@
             word-break: break-word;
         }
 
+        /* =========================
+           VIDEO PREVIEW
+        ========================= */
+
+        .video-preview {
+            display: none;
+            margin: 25px auto 0;
+            width: 100%;
+            max-width: 720px;
+            text-align: center;
+        }
+
+        .video-preview.show {
+            display: block;
+        }
+
+        .video-preview video {
+            display: block;
+            width: 100%;
+            max-height: 420px;
+            margin: 0 auto;
+            background: #000000;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+
+        .preview-label {
+            margin-bottom: 10px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
         .controls {
             margin-top: 28px;
         }
@@ -716,6 +749,10 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .video-preview video {
+                max-height: 360px;
+            }
         }
 
         @media (max-width: 500px) {
@@ -778,6 +815,10 @@
 
             .pro-card h2 {
                 font-size: 32px;
+            }
+
+            .video-preview video {
+                max-height: 300px;
             }
         }
     </style>
@@ -916,6 +957,30 @@
                     >
                         No video selected
                     </div>
+
+                </div>
+
+
+                <!-- =========================
+                     VIDEO PREVIEW
+                ========================= -->
+
+                <div
+                    class="video-preview"
+                    id="videoPreview"
+                >
+
+                    <div class="preview-label">
+                        Video Preview
+                    </div>
+
+                    <video
+                        id="previewVideo"
+                        controls
+                        playsinline
+                    >
+                        Your browser does not support video playback.
+                    </video>
 
                 </div>
 
@@ -1310,6 +1375,7 @@
         let selectedFile = null;
         let selectedAction = null;
         let currentDownloadUrl = null;
+        let currentPreviewUrl = null;
 
 
         const videoInput =
@@ -1317,6 +1383,12 @@
 
         const fileName =
             document.getElementById("fileName");
+
+        const previewVideo =
+            document.getElementById("previewVideo");
+
+        const videoPreview =
+            document.getElementById("videoPreview");
 
         const processBtn =
             document.getElementById("processBtn");
@@ -1363,6 +1435,47 @@
                 downloadArea.classList.remove("show");
 
                 errorMessage.classList.remove("show");
+
+                progressPanel.classList.remove("show");
+
+                progressFill.style.width = "0%";
+
+
+                /* =========================
+                   CREATE VIDEO PREVIEW
+                ========================= */
+
+                if (currentPreviewUrl) {
+
+                    URL.revokeObjectURL(
+                        currentPreviewUrl
+                    );
+
+                    currentPreviewUrl = null;
+
+                }
+
+
+                previewVideo.pause();
+
+                previewVideo.removeAttribute("src");
+
+                previewVideo.load();
+
+
+                currentPreviewUrl =
+                    URL.createObjectURL(
+                        selectedFile
+                    );
+
+
+                previewVideo.src =
+                    currentPreviewUrl;
+
+
+                videoPreview.classList.add(
+                    "show"
+                );
 
             }
         );
