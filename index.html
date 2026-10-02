@@ -518,6 +518,24 @@
             color: #93c5fd;
         }
 
+        /* Processing-state improvement */
+
+        .action-btn:disabled {
+            opacity: 0.55;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        .action-btn:disabled:hover {
+            background: #111827;
+
+            border-color: #374151;
+
+            transform: none;
+        }
+
         /* =========================
            PROCESS BUTTON
         ========================= */
@@ -2162,6 +2180,35 @@
 
 
         /* =========================
+           PROCESSING STATE
+        ========================= */
+
+        function setProcessingState(isProcessing) {
+
+            document
+                .querySelectorAll(".action-btn")
+                .forEach(button => {
+                    button.disabled = isProcessing;
+                });
+
+            videoInput.disabled = isProcessing;
+
+            if (isProcessing) {
+
+                processBtn.textContent =
+                    "Processing Video...";
+
+                processBtn.disabled = true;
+
+            } else {
+
+                processBtn.disabled = false;
+
+            }
+        }
+
+
+        /* =========================
            ACTION BUTTONS
         ========================= */
 
@@ -2172,6 +2219,10 @@
                 button.addEventListener(
                     "click",
                     () => {
+
+                        if (button.disabled) {
+                            return;
+                        }
 
                         document
                             .querySelectorAll(".action-btn")
@@ -2249,11 +2300,15 @@
 
                 processBtn.disabled = false;
 
+                videoInput.disabled = false;
+
                 selectedAction = null;
 
                 document
                     .querySelectorAll(".action-btn")
                     .forEach(btn => {
+                        btn.disabled = false;
+
                         btn.classList.remove("active");
                     });
 
@@ -2319,6 +2374,13 @@
             "click",
             async () => {
 
+                if (
+                    processBtn.textContent ===
+                    "Process Another Video"
+                ) {
+                    return;
+                }
+
                 if (!selectedVideo) {
                     return;
                 }
@@ -2339,10 +2401,7 @@
                 downloadArea.classList.remove("show");
 
 
-                processBtn.disabled = true;
-
-                processBtn.textContent =
-                    "Processing...";
+                setProcessingState(true);
 
 
                 progressPanel.classList.add("show");
@@ -2547,6 +2606,8 @@
                     );
 
 
+                    setProcessingState(false);
+
                     processBtn.disabled = false;
 
                     processBtn.textContent =
@@ -2567,6 +2628,9 @@
                     errorMessage.classList.add(
                         "show"
                     );
+
+
+                    setProcessingState(false);
 
                     processBtn.disabled = false;
 
@@ -2625,10 +2689,16 @@
                     document
                         .querySelectorAll(".action-btn")
                         .forEach(btn => {
+
+                            btn.disabled = false;
+
                             btn.classList.remove(
                                 "active"
                             );
+
                         });
+
+                    videoInput.disabled = false;
 
                     previewVideo.pause();
 
